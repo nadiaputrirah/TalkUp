@@ -6,17 +6,16 @@ import {
   FooterLinkGroup,
   FooterCopyright,
 } from "flowbite-react";
-import Logo from "../../../assets/images/logo-light.svg";
 
 const Footer = () => {
   return (
     <FlowFooter container>
       <div className="flex flex-col items-center">
-        <FooterBrand href="/" src={Logo} alt="TalkUp Logo" />
+        <FooterBrand href="/" src="/assets/images/logo-light.svg" alt="TalkUp Logo" />
 
         <p
           className="
-            text-center text-white mb-8 max-w-3xl mx-auto mt-2 mb-2 
+            text-center text-white md:mb-8 max-w-3xl mx-auto mt-2 mb-2 
             text-sm md:text-base leading-relaxed px-4
           "
         >

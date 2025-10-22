@@ -6,6 +6,7 @@ import "./index.css";
 import Navbar from "./view/components/layout/Navbar";
 import Footer from "./view/components/layout/Footer";
 import Home from "./view/pages/Home";
+import Login from "./view/pages/Login";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
         <Footer />
       </BrowserRouter>

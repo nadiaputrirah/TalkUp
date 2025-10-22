@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import HeroImg from "../../../assets/images/hero.svg";
 import { Button } from "flowbite-react";
 
 const Hero = () => {
@@ -11,7 +10,7 @@ const Hero = () => {
       >
         <div className="flex justify-center items-center mb-8 lg:hidden">
           <img
-            src={HeroImg}
+            src="/assets/images/hero.svg"
             alt="Hero TalkUp"
             className="w-full h-auto object-contain max-w-md"
           />
@@ -46,7 +45,7 @@ const Hero = () => {
 
         <div className="hidden lg:flex lg:justify-center lg:items-center">
           <img
-            src={HeroImg}
+            src="/assets/images/hero.svg"
             alt="Hero TalkUp"
             className="w-full h-auto object-contain"
             style={{ maxHeight: "500px" }}
