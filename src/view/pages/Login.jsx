@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import HeroImg from "../../assets/images/hero.svg";
 import { Button, TextInput } from "flowbite-react";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 
@@ -22,7 +21,7 @@ export default function Login() {
       >
         <div className="flex justify-center items-center mb-8 ">
           <img
-            src={HeroImg}
+            src="/assets/images/hero.svg"
             alt="Hero TalkUp"
             className="w-full h-auto object-contain max-w-md"
           />

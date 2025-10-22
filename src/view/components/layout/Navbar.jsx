@@ -6,7 +6,6 @@ import {
   NavbarLink,
   Button,
 } from "flowbite-react";
-import Logo from "../../../assets/images/logo-dark.svg";
 import { Link, useLocation } from "react-router-dom";
 import { menuItems } from "../../../presenters/menu";
 import { useNavbarPresenter } from "../../../presenters/navbar-presenter";
@@ -24,7 +23,7 @@ const Navbar = () => {
       <div className="w-full max-w-screen-xl mx-auto px-4 py-4">
         <FlowNavbar fluid rounded>
           <NavbarBrand as={Link} to="/">
-            <img src={Logo} className="h-6" alt="Logo Talk Up" />
+            <img src="/assets/images/logo-dark.svg" className="h-6" alt="Logo Talk Up" />
           </NavbarBrand>
 
           <NavbarToggle />
