@@ -1,10 +1,10 @@
-// import Sidebar from "./Sidebar";
-// import Header from "./Header";
 import { Outlet } from "react-router-dom";
+import Sidebar from "./Sidebar";
+import Header from "./Header";
 
 function DashboardLayout() {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Header />
