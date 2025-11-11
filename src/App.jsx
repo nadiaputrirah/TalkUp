@@ -13,7 +13,7 @@ import Login from "./view/pages/Login";
 import Forum from "./view/pages/Forum";
 import ForumNew from "./view/components/layout/forum/ForumNew";
 import ForumDetail from "./view/components/layout/forum/ForumDetail";
-import Guru_BK from "./view/pages/dashboard/Guru_BK";
+import Guru_BK from "./view/pages/dashboard/gurubk/GuruBK";
 
 function App() {
   return (

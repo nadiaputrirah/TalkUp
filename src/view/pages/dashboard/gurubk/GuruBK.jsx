@@ -4,10 +4,9 @@ import {
   EyeOutlined,
   EditOutlined,
   DeleteOutlined,
-  DownOutlined,
 } from "@ant-design/icons";
-import { jadwalKonseling } from "../../../models/dashboard/jadwalKonseling";
-import { historyPengajuan } from "../../../models/dashboard/historyPengajuan";
+import { jadwalKonseling } from "../../../../models/dashboard/jadwalKonseling";
+import { historyPengajuan } from "../../../../models/dashboard/historyPengajuan";
 
 export default function Guru_BK() {
   const [currentKonselingPage, setCurrentKonselingPage] = useState(1);
