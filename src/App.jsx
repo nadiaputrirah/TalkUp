@@ -13,7 +13,9 @@ import Login from "./view/pages/Login";
 import Forum from "./view/pages/Forum";
 import ForumNew from "./view/components/layout/forum/ForumNew";
 import ForumDetail from "./view/components/layout/forum/ForumDetail";
-import Guru_BK from "./view/pages/dashboard/gurubk/GuruBK";
+import GuruBK from "./view/pages/dashboard/gurubk/GuruBK";
+import Index from "./view/pages/dashboard/gurubk/permintaanKonseling/Index";
+import Detail from "./view/pages/dashboard/gurubk/permintaanKonseling/Detail";
 
 function App() {
   return (
@@ -26,7 +28,9 @@ function App() {
           </Route>
 
           <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route path="gurubk" element={<Guru_BK />} />
+            <Route path="gurubk" element={<GuruBK />} />
+            <Route path="permintaankonseling" element={<Index />} />
+            <Route path="permintaankonseling/:id" element={<Detail />} />
           </Route>
         </Routes>
       </BrowserRouter>
