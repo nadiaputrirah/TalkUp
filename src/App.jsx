@@ -13,6 +13,10 @@ import Login from "./view/pages/Login";
 import Forum from "./view/pages/Forum";
 import ForumNew from "./view/components/layout/forum/ForumNew";
 import ForumDetail from "./view/components/layout/forum/ForumDetail";
+import Konsultasi from "./view/pages/dashboard/Konsultasi";
+import RiwayatKonseling from "./view/pages/dashboard/RiwayatKonseling";
+import KonsultasiDetail from "./view/pages/dashboard/KonsultasiDetail";
+
 
 function App() {
   return (
@@ -28,7 +32,9 @@ function App() {
           </Route>
 
           <Route element={<DashboardLayout />}>
-            {/* <Route path="/dashboard" element={<DashboardHome />} /> */}
+            <Route path="/dashboard/konsultasi" element={<Konsultasi />} />
+            <Route path="/dashboard/riwayat" element={<RiwayatKonseling />} />
+            <Route path="/dashboard/konsultasi/:id" element={<KonsultasiDetail />} />
           </Route>
         </Routes>
       </BrowserRouter>
