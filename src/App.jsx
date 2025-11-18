@@ -6,6 +6,7 @@ import MainLayout from "./view/components/layout/MainLayout";
 import DashboardLayout from "./view/components/layout/DashboardLayout";
 import Home from "./view/pages/Home";
 import Login from "./view/pages/Login";
+import Register from "./view/pages/Register";   
 import Forum from "./view/pages/Forum";
 import ForumNew from "./view/components/layout/forum/ForumNew";
 import ForumDetail from "./view/components/layout/forum/ForumDetail";
@@ -13,11 +14,13 @@ import SuperAdmin from "./view/pages/dashboard/superadmin";
 import DaftarGuruBK from "./view/pages/dashboard/superadmin/GuruBK";
 import DaftarSiswa from "./view/pages/dashboard/superadmin/Siswa";
 import GuruBK from "./view/pages/dashboard/gurubk/GuruBK";
+import IndexPermintaan from "./view/pages/dashboard/gurubk/permintaanKonseling/IndexPermintaan";
+import DetailPermintaan from "./view/pages/dashboard/gurubk/permintaanKonseling/DetailPermintaan";
+import IndexJadwal from "./view/pages/dashboard/gurubk/jadwalKonseling/IndexJadwal";
+import DetailJadwal from "./view/pages/dashboard/gurubk/jadwalKonseling/DetailJadwal";
 import Konsultasi from "./view/pages/dashboard/siswa/Konsultasi";
 import RiwayatKonseling from "./view/pages/dashboard/siswa/RiwayatKonseling";
 import KonsultasiDetail from "./view/pages/dashboard/siswa/KonsultasiDetail";
-import Index from "./view/pages/dashboard/gurubk/permintaanKonseling/IndexPermintaan";
-import Detail from "./view/pages/dashboard/gurubk/permintaanKonseling/DetailPermintaan";
 import AddGuruBK from "./view/pages/dashboard/superadmin/gurubk/add";
 import EditGuruBK from "./view/pages/dashboard/superadmin/gurubk/edit";
 import ViewGuruBK from "./view/pages/dashboard/superadmin/gurubk/view";
@@ -36,6 +39,7 @@ const App = () => {
           <Route path="/" element={<MainLayout />}>
             <Route path="" element={<Home />} />
             <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
             <Route path="forum" element={<Forum />} />
             <Route path="forum/new" element={<ForumNew />} />
             <Route path="forum/:id" element={<ForumDetail />} />
@@ -56,8 +60,10 @@ const App = () => {
             <Route path="superadmin/daftar-siswa/view/:id" element={<ViewSiswa />} />
             
             <Route path="gurubk" element={<GuruBK />} />
-            <Route path="permintaankonseling" element={<Index />} />
-            <Route path="permintaankonseling/:id" element={<Detail />} />
+            <Route path="permintaankonseling" element={<IndexPermintaan />} />
+            <Route path="permintaankonseling/:id" element={<DetailPermintaan />} />
+            <Route path="jadwalkonseling" element={<IndexJadwal />} />
+            <Route path="jadwalkonseling/:id" element={<DetailJadwal />} />
             
             <Route path="konsultasi" element={<Konsultasi />} />
             <Route path="riwayat" element={<RiwayatKonseling />} />
