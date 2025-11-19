@@ -162,6 +162,6 @@ export default function Index() {
       </div>
 
       <RiwayatPengajuanTable />
-    </div>
+    </>
   );
 }

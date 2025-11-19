@@ -39,8 +39,8 @@ const Navbar = () => {
                 {item.name}
               </NavbarLink>
             ))}
-            <Button as={Link} to="/login" color={'primary'} size="sm">
-              Login
+            <Button as={Link} to="/register" color={'primary'} size="sm">
+              Register
             </Button>
           </NavbarCollapse>
         </FlowNavbar>
