@@ -1,20 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, TextInput, Textarea, Select } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Konsultasi = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [guruBKList, setGuruBKList] = useState([]);
+  const [loadingGuru, setLoadingGuru] = useState(true);
   
   const [formData, setFormData] = useState({
     nama: "",
     email: "",
     kelas: "XI TKJ 4",
-    guruBk: "Bu Rina Astuti, S.Pd.",
+    guruBk: "",
     guruBkTambahan: "",
     jenisSesi: "Online",
     topik: "Karir",
     deskripsi: "",
+    id_guru_bk: "",
   });
+
+  useEffect(() => {
+    fetchGuruBK();
+  }, []);
+
+  const fetchGuruBK = async () => {
+    try {
+      setLoadingGuru(true);
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        "http://40.117.43.104/api/v1/guru-bk/",
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+      console.log("Guru BK List:", response.data);
+      setGuruBKList(response.data.data || []);
+    } catch (err) {
+      console.error("Error fetching guru BK:", err);
+      setGuruBKList([]);
+    } finally {
+      setLoadingGuru(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,11 +56,52 @@ const Konsultasi = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    alert("Konseling berhasil diajukan!");
-    navigate("/dashboard/riwayat");
+    setLoading(true);
+
+    try {
+      const token = localStorage.getItem("token");
+      
+      const payload = {
+        jenis_sesi: formData.jenisSesi,
+        topik_konseling: formData.topik,
+        deskripsi_masalah: formData.deskripsi
+      };
+
+      if (formData.id_guru_bk) {
+        payload.id_guru_bk = parseInt(formData.id_guru_bk);
+      }
+
+      console.log("Payload:", payload);
+
+      const response = await axios.post(
+        "http://40.117.43.104/api/v1/konseling/",
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        }
+      );
+
+      console.log("Response sukses:", response.data);
+      alert("Konseling berhasil diajukan!");
+      navigate("/dashboard/riwayat");
+    } catch (err) {
+      console.error("Error:", err.response?.data);
+      
+      if (err.response?.status === 401) {
+        alert("Sesi login Anda telah berakhir. Silakan login kembali.");
+        localStorage.clear();
+        navigate("/login");
+      } else {
+        alert(err.response?.data?.message || "Gagal mengajukan konseling. Silakan coba lagi.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -61,6 +134,7 @@ const Konsultasi = () => {
                 value={formData.nama}
                 onChange={handleChange}
                 required
+                disabled={loading}
               />
             </div>
 
@@ -77,6 +151,7 @@ const Konsultasi = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                disabled={loading}
               />
             </div>
 
@@ -99,15 +174,21 @@ const Konsultasi = () => {
               <label htmlFor="guruBk" className="block mb-2 font-medium">
                 Guru BK
               </label>
-              <TextInput
-                id="guruBk"
-                name="guruBk"
+              <Select
+                id="id_guru_bk"
+                name="id_guru_bk"
                 color="primary"
-                type="text"
-                value={formData.guruBk}
-                readOnly
-                disabled
-              />
+                value={formData.id_guru_bk}
+                onChange={handleChange}
+                disabled={loading || loadingGuru}
+              >
+                <option value="">Otomatis ditentukan sistem</option>
+                {guruBKList.map((guru) => (
+                  <option key={guru.id_guru_bk} value={guru.id_guru_bk}>
+                    {guru.nama}
+                  </option>
+                ))}
+              </Select>
             </div>
 
             <div className="w-full">
@@ -120,6 +201,7 @@ const Konsultasi = () => {
                 color="primary"
                 value={formData.guruBkTambahan}
                 onChange={handleChange}
+                disabled={loading}
               >
                 <option value="">Pilih Guru BK Tambahan</option>
                 <option value="Ibu Sri">Ibu Sri</option>
@@ -140,6 +222,7 @@ const Konsultasi = () => {
                 value={formData.topik}
                 onChange={handleChange}
                 required
+                disabled={loading}
               >
                 <option value="Pribadi">Pribadi</option>
                 <option value="Sosial">Sosial</option>
@@ -159,6 +242,7 @@ const Konsultasi = () => {
                 value={formData.jenisSesi}
                 onChange={handleChange}
                 required
+                disabled={loading}
               >
                 <option value="Online">Online</option>
                 <option value="Offline">Offline</option>
@@ -178,6 +262,7 @@ const Konsultasi = () => {
                 onChange={handleChange}
                 rows={4}
                 required
+                disabled={loading}
               />
             </div>
           </div>
@@ -187,8 +272,9 @@ const Konsultasi = () => {
               color="primary" 
               size="md" 
               type="submit"
+              disabled={loading || loadingGuru}
             >
-              Ajukan Konseling
+              {loading ? "Mengajukan..." : "Ajukan Konseling"}
             </Button>
           </div>
         </form>

@@ -7,9 +7,15 @@ const SidebarComponent = ({ userRole = "siswa" }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const menuItems = sideBarData.filter(item => 
-    item.roles.includes(userRole)
-  );
+  console.log("Current userRole:", userRole);
+
+  const menuItems = sideBarData.filter(item => {
+    const hasRole = item.roles.includes(userRole);
+    console.log(`Item: ${item.name}, Roles: ${item.roles}, Has Role: ${hasRole}`);
+    return hasRole;
+  });
+
+  console.log("Filtered menu items:", menuItems);
 
   const handleLogout = () => {
     localStorage.removeItem('userRole');

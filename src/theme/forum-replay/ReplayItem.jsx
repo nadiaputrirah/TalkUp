@@ -10,18 +10,22 @@ const ReplyItem = ({
   const avatarSize = isNested ? "sm" : "md";
   const textSize = isNested ? "text-sm" : "text-base";
 
+  const displayName = reply.is_anonim 
+    ? "Siswa Anonim" 
+    : reply.author || reply.pembuat_detail?.nama_lengkap || reply.pembuat_detail?.nama || "Pengguna";
+
   return (
     <div className="flex items-start gap-3">
-    <Avatar size={avatarSize} color="primary" rounded />
+      <Avatar size={avatarSize} color="primary" rounded />
       
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-2">
           <span className={`font-medium text-gray-900 ${isNested ? 'text-sm' : ''}`}>
-            {reply.author}
+            {displayName}
           </span>
           <span className="text-gray-400">|</span>
           <span className={`text-gray-500 ${isNested ? 'text-xs' : 'text-sm'}`}>
-            {reply.timestamp}
+            {reply.timestamp || reply.tgl_post}
           </span>
         </div>
 
@@ -38,7 +42,7 @@ const ReplyItem = ({
         {showReplyButton && (
           <div className="flex items-center justify-end gap-4">
             <span className="text-sm text-gray-500">
-              {reply.replies || 0} Percakapan
+              {reply.replies || reply.jumlah_balasan || 0} Percakapan
             </span>
             <button 
               onClick={onReply}

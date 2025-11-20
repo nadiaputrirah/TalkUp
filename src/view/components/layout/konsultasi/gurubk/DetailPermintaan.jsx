@@ -10,8 +10,13 @@ import StatusBadge from "../../../../../theme/StatusBadge";
 const DetailPermintaanKonseling = ({ data }) => {
   const formatTanggal = (tanggal) => {
     if (!tanggal) return "-";
-    const [day, month, year] = tanggal.split("-");
-    const date = new Date(`${year}-${month}-${day}`);
+    
+    const date = new Date(tanggal);
+    
+    if (isNaN(date.getTime())) {
+      return tanggal;
+    }
+    
     return new Intl.DateTimeFormat("id-ID", {
       day: "numeric",
       month: "long",
@@ -22,25 +27,25 @@ const DetailPermintaanKonseling = ({ data }) => {
   const fields = [
     {
       label: "Nama",
-      value: data.namaSiswa,
+      value: data.nama || "-",
     },
     {
       label: "Kelas",
-      value: data.kelas || data.namaSiswa,
+      value: data.kelas || "-",
     },
     {
       label: "Guru BK",
-      value: data.guruBK || data.namaSiswa,
+      value: data.guruBK || "-",
       icon: <UserOutlined />,
     },
     {
       label: "Jenis Sesi",
-      value: data.jenisSesi || data.namaSiswa,
+      value: data.jenisSesi || "-",
       icon: <MessageOutlined />,
     },
     {
       label: "Topik Konseling",
-      value: data.topikKonseling || data.namaSiswa,
+      value: data.topikKonseling || "-",
       icon: <CommentOutlined />,
     },
     {
@@ -50,7 +55,7 @@ const DetailPermintaanKonseling = ({ data }) => {
     },
     {
       label: "Deskripsi",
-      value: data.deskripsi || data.namaSiswa,
+      value: data.deskripsi || "-",
       icon: <MessageOutlined />,
       fullWidth: true,
     },

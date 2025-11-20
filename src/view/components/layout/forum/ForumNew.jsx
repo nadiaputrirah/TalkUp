@@ -52,12 +52,13 @@ function ForumNew() {
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Ketik topik disini..."
                   className="w-full px-4 py-3 border border-border rounded-lg text-gray-900 placeholder-gray-400 focus:ring-1 focus:ring-focus focus:border-focus focus:outline-none"
+                  disabled={loading}
                 />
               </div>
 
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Konten Diskusi
+                  Konten Diskusi (minimal 10 karakter)
                 </label>
                 <textarea
                   name="konten"
@@ -66,17 +67,27 @@ function ForumNew() {
                   placeholder="Ketik disini..."
                   rows={6}
                   className="w-full px-4 py-3 border border-border rounded-lg text-gray-900 placeholder-gray-400 focus:ring-1 focus:ring-focus focus:border-focus focus:outline-none resize-none"
+                  disabled={loading}
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  {content.length} karakter
+                </p>
               </div>
 
               <div className="flex justify-end gap-2">
                 <button
                   onClick={handleCancel}
-                  className="px-6 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+                  disabled={loading}
+                  className="px-6 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Batal
                 </button>
-                <Button color="primary" size="md" onClick={handleSubmit}>
+                <Button 
+                  color="primary" 
+                  size="md" 
+                  onClick={handleSubmit}
+                  disabled={loading || !title.trim() || content.trim().length < 10}
+                >
                   {loading ? "Posting..." : "Post"}
                 </Button>
               </div>

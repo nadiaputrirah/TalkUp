@@ -7,6 +7,7 @@ const generateBreadcrumbMap = () => {
     add: "Tambah",
     edit: "Edit",
     view: "Lihat",
+    detail: "Lihat",
     permintaankonseling: "Permintaan Konseling",
     jadwalkonseling: "Jadwal Konseling",
     riwayatkonseling: "Riwayat Konseling",

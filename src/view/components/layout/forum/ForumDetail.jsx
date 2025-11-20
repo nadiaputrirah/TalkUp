@@ -14,14 +14,9 @@ function ForumDetail() {
     setReplyText,
     identity,
     setIdentity,
-    replyingTo,
-    nestedReplyText,
-    setNestedReplyText,
     loading,
     conversationCount,
     handleSubmitReply,
-    handleSubmitNestedReply,
-    toggleReplyForm,
   } = useForumDetailPresenter(id);
 
   if (loading) {
@@ -88,24 +83,8 @@ function ForumDetail() {
 
               <ReplyItem
                 reply={reply}
-                onReply={() => toggleReplyForm(reply.id)}
+                showReplyButton={false}
               />
-
-              {replyingTo === reply.id && (
-                <div className="ml-12 mt-4 pl-4 border-l-2 border-gray-200">
-                  <ReplyForm
-                    placeholder={`Balas ke ${reply.author}...`}
-                    value={nestedReplyText}
-                    onChange={(e) => setNestedReplyText(e.target.value)}
-                    identity={identity}
-                    onIdentityChange={setIdentity}
-                    onSubmit={() => handleSubmitNestedReply(reply.id)}
-                    onCancel={() => toggleReplyForm(null)}
-                    showCancel={true}
-                    isNested={true}
-                  />
-                </div>
-              )}
 
             </div>
           ))}

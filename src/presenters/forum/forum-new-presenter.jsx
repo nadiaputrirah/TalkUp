@@ -4,7 +4,6 @@ import axios from "axios";
 
 export const useForumNewPresenter = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
   
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -12,45 +11,61 @@ export const useForumNewPresenter = () => {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    if (!title.trim() || !content.trim()) {
-      alert("Judul dan konten harus diisi!");
+    if (!title.trim()) {
+      alert("Judul diskusi harus diisi!");
+      return;
+    }
+
+    if (!content.trim()) {
+      alert("Konten diskusi harus diisi!");
+      return;
+    }
+
+    if (content.trim().length < 10) {
+      alert("Konten minimal 10 karakter!");
       return;
     }
 
     setLoading(true);
 
     try {
+      const token = localStorage.getItem("token");
+      
+      const payload = {
+        judul: title.trim(),
+        konten: content.trim(),
+        is_anonim: identity === "anonim"
+      };
+
+      console.log("Payload yang dikirim:", payload);
+
       const res = await axios.post(
-        "http://40.117.43.104/api/v1/diskusi/",
-        {
-          judul: title,
-          konten: content,
-          is_anonim: identity === "anonim",
-        },
+        "http://40.117.43.104/api/v1/diskusi",
+        payload,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
           },
         }
       );
 
       console.log("HASIL POST:", res.data);
-
+      alert("Diskusi berhasil dibuat!");
       navigate("/forum");
     } catch (err) {
       console.error("ERROR TAMBAH DISKUSI:", err.response?.data);
-      alert("Gagal menambah diskusi!");
+      
+      if (err.response?.data?.errors) {
+        alert(`Gagal: ${err.response.data.errors.join(", ")}`);
+      } else if (err.response?.data?.message) {
+        alert(`Gagal: ${err.response.data.message}`);
+      } else {
+        alert("Gagal menambah diskusi!");
+      }
     } finally {
       setLoading(false);
     }
-
-    console.log({
-      title,
-      content,
-      identity,
-      timestamp: new Date().toISOString(),
-    });
-    navigate("/forum");
   };
 
   const handleCancel = () => {

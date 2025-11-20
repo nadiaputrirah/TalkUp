@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, TextInput } from "flowbite-react";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import axios from "axios";
 
 export default function Register() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const inputType = showPassword ? "text" : "password";
-
-  const toggleVisibility = () => {
-    setShowPassword((prev) => !prev);
-  };
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const [form, setForm] = useState({
     nama_lengkap: "",
@@ -19,44 +17,129 @@ export default function Register() {
     password: "",
   });
 
+  const toggleVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+    
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: "" });
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!form.nama_lengkap.trim()) {
+      newErrors.nama_lengkap = "Nama lengkap wajib diisi";
+    } else if (form.nama_lengkap.trim().length < 3) {
+      newErrors.nama_lengkap = "Nama lengkap minimal 3 karakter";
+    }
+
+    if (!form.kelas.trim()) {
+      newErrors.kelas = "Kelas wajib diisi";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!form.email.trim()) {
+      newErrors.email = "Email wajib diisi";
+    } else if (!emailRegex.test(form.email)) {
+      newErrors.email = "Format email tidak valid";
+    }
+
+    if (!form.password) {
+      newErrors.password = "Password wajib diisi";
+    } else if (form.password.length < 8) {
+      newErrors.password = "Password minimal 8 karakter";
+    } else if (!/(?=.*[a-z])/.test(form.password)) {
+      newErrors.password = "Password harus mengandung huruf kecil";
+    } else if (!/(?=.*[A-Z])/.test(form.password)) {
+      newErrors.password = "Password harus mengandung huruf besar";
+    } else if (!/(?=.*\d)/.test(form.password)) {
+      newErrors.password = "Password harus mengandung angka";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Form sebelum kirim:", form);
+    if (!validateForm()) {
+      return;
+    }
 
-    const bodyToSend = { obj: form };
-    console.log("Body dikirim:", bodyToSend);
-
-    console.log("Form sebelum kirim:", form);
+    setLoading(true);
 
     try {
+      const payload = {
+        nama_lengkap: form.nama_lengkap.trim(),
+        kelas: form.kelas.trim(),
+        email: form.email.trim().toLowerCase(),
+        password: form.password
+      };
+
+      console.log("Payload yang dikirim:", payload);
+
       const response = await axios.post(
         "http://40.117.43.104/api/v1/auth/register",
-        form,
-        { headers: { "Content-Type": "application/json" } }
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
       );
 
       console.log("Response sukses:", response.data);
-      alert("Registrasi berhasil!");
+      alert("Registrasi berhasil! Silakan login.");
+      navigate("/login");
     } catch (err) {
       console.error("Error status:", err.response?.status);
       console.error("Error response data:", err.response?.data);
-      alert("Registrasi gagal: " + JSON.stringify(err.response?.data));
+      
+      if (err.response?.status === 400) {
+        const apiErrors = err.response?.data?.errors;
+        
+        if (Array.isArray(apiErrors)) {
+          const errorMap = {};
+          apiErrors.forEach((error) => {
+            if (error.includes("Nama lengkap")) {
+              errorMap.nama_lengkap = error;
+            } else if (error.includes("Kelas")) {
+              errorMap.kelas = error;
+            } else if (error.includes("Email") || error.includes("email")) {
+              errorMap.email = error;
+            } else if (error.includes("Password")) {
+              errorMap.password = error;
+            }
+          });
+          setErrors(errorMap);
+          alert("Validasi input gagal. Periksa form Anda.");
+        } else {
+          alert(err.response?.data?.message || "Data tidak valid. Periksa kembali form Anda.");
+        }
+      } else if (err.response?.status === 409) {
+        setErrors({ email: "Email sudah terdaftar" });
+        alert("Email sudah terdaftar. Gunakan email lain atau login.");
+      } else {
+        alert(err.response?.data?.message || "Registrasi gagal. Silakan coba lagi.");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
+  const inputType = showPassword ? "text" : "password";
   const EyeIcon = showPassword ? EyeInvisibleOutlined : EyeOutlined;
 
   return (
     <section className="bg-white">
-      <div
-        className="grid max-w-screen-xl px-4 py-8 mx-auto 
-        lg:gap-12 xl:gap-16 lg:py-16 lg:grid-cols-2 items-start"
-      >
+      <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-12 xl:gap-16 lg:py-16 lg:grid-cols-2 items-start">
         <div className="flex justify-center items-center mb-8">
           <img
             src="/assets/images/hero.svg"
@@ -78,51 +161,72 @@ export default function Register() {
 
           <form className="flex flex-col gap-4 mt-4" onSubmit={handleSubmit}>
             <div className="w-full">
-              <label className="block mb-2 font-medium">Nama Lengkap</label>
+              <label className="block mb-2 font-medium">
+                Nama Lengkap <span className="text-red-500">*</span>
+              </label>
               <TextInput
                 name="nama_lengkap"
-                color="primary"
+                color={errors.nama_lengkap ? "failure" : "primary"}
                 type="text"
                 placeholder="Nama Lengkap"
-                required
+                value={form.nama_lengkap}
                 onChange={handleChange}
+                disabled={loading}
               />
+              {errors.nama_lengkap && (
+                <p className="text-red-500 text-sm mt-1">{errors.nama_lengkap}</p>
+              )}
             </div>
 
             <div className="w-full">
-              <label className="block mb-2 font-medium">Kelas</label>
+              <label className="block mb-2 font-medium">
+                Kelas <span className="text-red-500">*</span>
+              </label>
               <TextInput
                 name="kelas"
-                color="primary"
+                color={errors.kelas ? "failure" : "primary"}
                 type="text"
                 placeholder="XI RPL 2"
-                required
+                value={form.kelas}
                 onChange={handleChange}
+                disabled={loading}
               />
+              {errors.kelas && (
+                <p className="text-red-500 text-sm mt-1">{errors.kelas}</p>
+              )}
             </div>
 
             <div className="w-full">
-              <label className="block mb-2 font-medium">Email</label>
+              <label className="block mb-2 font-medium">
+                Email <span className="text-red-500">*</span>
+              </label>
               <TextInput
                 name="email"
-                color="primary"
+                color={errors.email ? "failure" : "primary"}
                 type="email"
                 placeholder="example@gmail.com"
-                required
+                value={form.email}
                 onChange={handleChange}
+                disabled={loading}
               />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
             </div>
 
             <div className="w-full">
-              <label className="block mb-2 font-medium">Password</label>
+              <label className="block mb-2 font-medium">
+                Password <span className="text-red-500">*</span>
+              </label>
               <div className="relative">
                 <TextInput
                   name="password"
-                  color="primary"
+                  color={errors.password ? "failure" : "primary"}
                   type={inputType}
                   placeholder="Password"
-                  required
+                  value={form.password}
                   onChange={handleChange}
+                  disabled={loading}
                 />
                 <div
                   onClick={toggleVisibility}
@@ -131,10 +235,22 @@ export default function Register() {
                   <EyeIcon className="h-5 w-5" />
                 </div>
               </div>
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+              )}
+              <p className="text-gray-500 text-xs mt-1">
+                Password minimal 8 karakter, mengandung huruf besar, huruf kecil, dan angka
+              </p>
             </div>
 
-            <Button color="primary" size="md" type="submit" className="mt-4">
-              Register
+            <Button 
+              color="primary" 
+              size="md" 
+              type="submit" 
+              className="mt-4"
+              disabled={loading}
+            >
+              {loading ? "Memproses..." : "Register"}
             </Button>
 
             <p className="text-sm text-gray-600">

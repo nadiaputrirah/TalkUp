@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 
 const IdentityDropdown = ({ value, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [userName, setUserName] = useState("Siswa");
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const siswaData = user.siswa || {};
+    const nama = siswaData.nama_lengkap || user.nama_lengkap || user.nama || "Siswa";
+    setUserName(nama);
+  }, []);
 
   const identities = [
-    { value: "anonim", label: "Siswa anonim" },
-    { value: "real", label: "Nadia Putri" }
+    { value: "anonim", label: "Anonim" },
+    { value: "real", label: userName }
   ];
 
   const selectedIdentity = identities.find(i => i.value === value) || identities[0];

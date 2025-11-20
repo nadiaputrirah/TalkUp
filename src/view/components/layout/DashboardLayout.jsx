@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 import Header from "./Header";
 
 const DashboardLayout = () => {
-  const userRole = "gurubk"; // api role
+  const userRole = localStorage.getItem("userRole") || "siswa";
 
   return (
     <div className="flex h-screen overflow-hidden">

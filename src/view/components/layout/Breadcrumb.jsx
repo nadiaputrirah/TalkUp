@@ -14,6 +14,8 @@ const Breadcrumb = () => {
     
     for (let i = 0; i < pathnames.length; i++) {
       const segment = pathnames[i];
+      const nextSegment = pathnames[i + 1];
+      
       if (segment === "dashboard") continue;
       
       if (segment === "superadmin") {
@@ -24,9 +26,18 @@ const Breadcrumb = () => {
         }
         continue;
       }
+
+      if (segment === "detail" || segment === "edit") {
+        if (nextSegment && isNumeric(nextSegment)) {
+          filtered.push(segment);
+          i++;
+          continue;
+        }
+      }
+      
       if (isNumeric(segment)) {
         const prevSegment = pathnames[i - 1];
-        if (prevSegment === "view" || prevSegment === "edit" || prevSegment === "add") {
+        if (prevSegment === "view" || prevSegment === "edit" || prevSegment === "add" || prevSegment === "detail") {
           continue;
         } else {
           filtered.push("view");
@@ -69,6 +80,22 @@ const Breadcrumb = () => {
       navigate("/dashboard/riwayat");
       return;
     }
+
+    if (clickedSegment === "jadwalkonseling") {
+      navigate("/dashboard/jadwalkonseling");
+      return;
+    }
+
+    if (clickedSegment === "permintaankonseling") {
+      navigate("/dashboard/permintaankonseling");
+      return;
+    }
+
+    if (clickedSegment === "riwayatkonseling") {
+      navigate("/dashboard/riwayatkonseling");
+      return;
+    }
+    
     const originalIndex = pathnames.indexOf(clickedSegment);
     if (originalIndex !== -1) {
       const path = `/${pathnames.slice(0, originalIndex + 1).join("/")}`;

@@ -7,7 +7,10 @@ const DiscussionCard = ({
   isNested = false,
 }) => {
   const avatarSize = isNested ? "sm" : "md";
-  const textSize = isNested ? "text-sm" : "text-base";
+
+  const displayName = discussion.is_anonim 
+    ? "Siswa Anonim" 
+    : discussion.pembuat_detail?.nama_lengkap || discussion.pembuat_detail?.nama || "Pengguna";
 
   return (
     <div className="bg-white border border-border rounded-lg p-6 hover:shadow-md transition-shadow">
@@ -15,7 +18,7 @@ const DiscussionCard = ({
         <Avatar size={avatarSize} color="primary" rounded />
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
-            <span className="font-medium text-gray-900"> {discussion.is_anonim ? "Anonim" : discussion.pembuat_detail?.nama}</span>
+            <span className="font-medium text-gray-900">{displayName}</span>
             <span className="text-gray-400">|</span>
             <span className="text-sm text-gray-500">{discussion.tgl_post}</span>
           </div>
@@ -27,7 +30,7 @@ const DiscussionCard = ({
           </p>
           <div className="flex items-center justify-end gap-4">
             <span className="text-sm text-gray-500">
-              {discussion.jumlah_balasan} Percakapan
+              {discussion.jumlah_balasan || 0} Percakapan
             </span>
             <Link
               to={`/forum/${discussion.id_diskusi}`}

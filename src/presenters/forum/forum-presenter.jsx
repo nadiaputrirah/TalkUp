@@ -2,16 +2,18 @@ import { useState, useEffect } from "react";
 
 export const useForumPresenter = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [filter, setFilter] = useState("Lihat semua diskusi");
+  const [filter, setFilter] = useState("terbaru");
   const [discussions, setDiscussions] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const filterOptions = [
-    "Lihat semua diskusi",
-    "Diskusi terbaru",
-    "Diskusi populer",
+    { value: "terbaru", label: "Filter" },
+    { value: "terpopuler", label: "Filter" }
   ];
+
   useEffect(() => {
+    console.log("Filter berubah:", filter);
+    console.log("Search query:", searchQuery);
   }, [filter, searchQuery]);
 
   const handleSearch = (query) => {
@@ -19,6 +21,7 @@ export const useForumPresenter = () => {
   };
 
   const handleFilterChange = (newFilter) => {
+    console.log("Filter dipilih:", newFilter);
     setFilter(newFilter);
   };
 

@@ -20,7 +20,7 @@ const ReplyForm = ({
 
   return (
     <div className="flex items-start gap-3">
-    <Avatar size={avatarSize} color="primary" rounded />
+      <Avatar size={avatarSize} color="primary" rounded />
       
       <div className="flex-1">
         <div className="mb-3">

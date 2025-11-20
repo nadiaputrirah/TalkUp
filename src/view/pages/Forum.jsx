@@ -4,18 +4,25 @@ import { Button } from "flowbite-react";
 import SearchInput from "../../theme/searchInput";
 import FilterDropdown from "../../theme/FilterDropdown";
 import DiscussionCard from "../../theme/DiscussionCard";
-import { useForumPresenter } from "../../presenters/forum/forum-presenter";
 import axios from "axios";
 
 function Forum() {
-  const {
-    searchQuery,
-    setSearchQuery,
-    filter,
-    filterOptions,
-    handleSearch,
-    handleFilterChange,
-  } = useForumPresenter();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState("terbaru");
+
+  const filterOptions = [
+    { value: "semua", label: "Lihat semua diskusi" },
+    { value: "terbaru", label: "Diskusi terbaru" },
+    { value: "terpopuler", label: "Diskusi terpopuler" }
+  ];
+
+  const handleSearch = () => {
+    fetchDiscussions();
+  };
+
+  const handleFilterChange = (newFilter) => {
+    setFilter(newFilter);
+  };
 
   const [discussionData, setDiscussionData] = useState([]);
   const [page] = useState(1);
@@ -74,6 +81,7 @@ function Forum() {
             options={filterOptions}
             value={filter}
             onChange={handleFilterChange}
+            placeholder="Filter"
             className="w-full md:w-auto"
           />
 
@@ -81,7 +89,7 @@ function Forum() {
             <Button as={Link} to="/forum/new" color="primary" size="md">
               Buat Diskusi Baru
             </Button>
-            <Button as={Link} to="/konseling" color="primary" size="md">
+            <Button as={Link} to="/dashboard/konsultasi" color="primary" size="md">
               Ajukan Konseling
             </Button>
           </div>

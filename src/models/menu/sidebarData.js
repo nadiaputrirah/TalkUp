@@ -1,62 +1,58 @@
 export const sideBarData = [
-  // superadmin
-  { 
-    name: "Dashboard", 
+  {
+    name: "Dashboard",
     path: "/dashboard/superadmin",
     breadcrumbKey: "dashboard-superadmin",
-    roles: ["superadmin"]
+    roles: ["super_admin", "superadmin"]
   },
-  { 
-    name: "Daftar Guru BK", 
+  {
+    name: "Daftar Guru BK",
     path: "/dashboard/superadmin/daftar-guru-bk",
-    roles: ["superadmin"]
+    roles: ["super_admin", "superadmin"]
   },
-  { 
-    name: "Daftar Siswa", 
+  {
+    name: "Daftar Siswa",
     path: "/dashboard/superadmin/daftar-siswa",
-    roles: ["superadmin"]
+    roles: ["super_admin", "superadmin"]
   },
 
-  // gurubk
-  { 
-    name: "Dashboard", 
+  {
+    name: "Dashboard",
     path: "/dashboard/gurubk",
     breadcrumbKey: "dashboard-gurubk",
-    roles: ["gurubk"]
+    roles: ["guru_bk", "gurubk"]
   },
-  { 
-    name: "Permintaan Konseling", 
+  {
+    name: "Permintaan Konseling",
     path: "/dashboard/permintaankonseling",
-    roles: ["gurubk"]
+    roles: ["guru_bk", "gurubk"]
   },
-  { 
-    name: "Jadwal Konseling", 
+  {
+    name: "Jadwal Konseling",
     path: "/dashboard/jadwalkonseling",
-    roles: ["gurubk"]
+    roles: ["guru_bk", "gurubk"]
   },
-  { 
-    name: "Riwayat Konseling", 
+  {
+    name: "Riwayat Konseling",
     path: "/dashboard/riwayatkonseling",
-    roles: ["gurubk"]
+    roles: ["guru_bk", "gurubk"]
   },
-  
-  // siswa
-  { 
-    name: "Konsultasi", 
+
+  {
+    name: "Konsultasi",
     path: "/dashboard/konsultasi",
     breadcrumbKey: "dashboard-siswa",
     roles: ["siswa"]
   },
-  { 
-    name: "Riwayat Konseling", 
+  {
+    name: "Riwayat Konseling",
     path: "/dashboard/riwayat",
     roles: ["siswa"]
   },
-  
-  // umum
-  { 
-    name: "Logout", 
+
+  {
+    name: "Logout",
     path: "#",
-    roles: ["gurubk", "siswa"]
+    roles: ["guru_bk", "gurubk", "siswa", "super_admin", "superadmin"]
   },
 ];
